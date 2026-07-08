@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ post.title }} - Django Blog</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen">
+    <div class="max-w-3xl mx-auto px-4 py-12">
+        <header class="mb-8 pb-4">
+            <a href="{% url 'blog:post_list' %}" class="text-xs text-blue-600 hover:text-blue-700 font-bold">← Back to Blog List</a>
+        </header>
+
+        <article class="bg-white p-8 rounded-xl border border-slate-200 shadow-sm mb-8">
+            <div class="flex items-center gap-2 text-xs text-slate-400 font-mono mb-3">
+                <span>By {{ post.author.username }}</span>
+                <span>•</span>
+                <span>{{ post.publish|date:"M d, Y" }}</span>
+                {% if post.category %}
+                    <span>•</span>
+                    <span class="bg-blue-50 text-blue-600 px-2 py-0.5 rounded font-semibold">{{ post.category.name }}</span>
+                {% endif %}
+            </div>
+            <h1 class="text-3xl font-extrabold text-slate-950 mb-6 leading-tight">{{ post.title }}</h1>
+            <div class="text-slate-700 text-sm leading-relaxed whitespace-pre-line border-t border-slate-100 pt-6">
+                {{ post.body }}
+            </div>
+        </article>
+
+        <section class="bg-white p-8 rounded-xl border border-slate-200 shadow-sm">
+            <h3 class="text-lg font-bold text-slate-950 mb-6">Comments ({% with comments.count as total_comments %}{{ total_comments }}{% endwith %})</h3>
+            
+            <div class="space-y-4 mb-8">
+                {% for comment in comments %}
+                    <div class="bg-slate-50 p-4 rounded-lg border border-slate-100 text-xs">
+                        <div class="flex justify-between text-slate-500 font-semibold mb-1">
+                            <span>{{ comment.name }}</span>
+                            <span>{{ comment.created|date:"M d, Y H:i" }}</span>
+                        </div>
+                        <p class="text-slate-700 leading-relaxed">{{ comment.body }}</p>
+                    </div>
+                {% empty %}
+                    <p class="text-slate-400 text-xs italic">No comments yet. Be the first to leave a response!</p>
+                {% endfor %}
+            </div>
+
+            <div class="border-t border-slate-100 pt-6">
+                <h4 class="text-sm font-bold text-slate-900 mb-4">Add a Comment</h4>
+                <form method="post" class="space-y-4">
+                    {% csrf_token %}
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Your Name</label>
+                        {{ comment_form.name }}
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Your Email</label>
+                        {{ comment_form.email }}
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Comment</label>
+                        {{ comment_form.body }}
+                    </div>
+                    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-5 py-2.5 rounded shadow transition-all">
+                        Post Comment
+                    </button>
+                </form>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

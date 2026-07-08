@@ -1,0 +1,6 @@
+{
+  "name": "Django Blueprint & Tutor",
+  "description": "An interactive full-stack architect and visual tutor for designing Python Django projects, configuring databases, models, and views with Gemini AI guidance.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

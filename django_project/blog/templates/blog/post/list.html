@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Django Nexus Blog</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen">
+    <div class="max-w-4xl mx-auto px-4 py-12">
+        <header class="mb-12 border-b border-slate-200 pb-6 flex justify-between items-center">
+            <div>
+                <h1 class="text-3xl font-black text-slate-900 tracking-tight">Django Nexus Blog</h1>
+                <p class="text-sm text-slate-500 mt-1">Ready to run on VSCode</p>
+            </div>
+            <a href="/admin/" class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-4 py-2 rounded shadow transition-colors">Admin Backoffice</a>
+        </header>
+
+        <main class="space-y-8">
+            {% if posts %}
+                {% for post in posts %}
+                    <article class="bg-white p-6 rounded-lg border border-slate-200 shadow-sm hover:shadow-md transition-all">
+                        <div class="flex items-center gap-2 text-xs text-slate-400 font-mono mb-2">
+                            <span>By {{ post.author.username }}</span>
+                            <span>•</span>
+                            <span>{{ post.publish|date:"M d, Y" }}</span>
+                            {% if post.category %}
+                                <span>•</span>
+                                <span class="bg-blue-50 text-blue-600 px-2 py-0.5 rounded font-semibold">{{ post.category.name }}</span>
+                            {% endif %}
+                        </div>
+                        <h2 class="text-xl font-bold text-slate-950 mb-3 hover:text-blue-600">
+                            <a href="{% url 'blog:post_detail' post.publish.year post.publish.month post.publish.day post.slug %}">
+                                {{ post.title }}
+                            </a>
+                        </h2>
+                        <p class="text-slate-600 text-sm leading-relaxed mb-4">
+                            {{ post.body|truncatewords:40 }}
+                        </p>
+                        <a href="{% url 'blog:post_detail' post.publish.year post.publish.month post.publish.day post.slug %}" class="text-xs text-blue-600 hover:text-blue-700 font-bold flex items-center gap-1">
+                            Read Full Post →
+                        </a>
+                    </article>
+                {% endfor %}
+            {% else %}
+                <div class="bg-white p-8 rounded-lg border border-slate-200 text-center">
+                    <p class="text-slate-500">No published blog posts found.</p>
+                    <p class="text-xs text-slate-400 mt-2">Log in to the <a href="/admin/" class="text-blue-600 underline">Admin Panel</a> to create a superuser and add Categories and Posts!</p>
+                </div>
+            {% endif %}
+        </main>
+    </div>
+</body>
+</html>
